@@ -10,12 +10,11 @@ import SwiftUI
 
 struct ContentView: View {
   
-  // from viewModal
+
   var game : EmojiMemoryGame
   
   var body: some View {
     VStack {
-//      ForEach(0..<4) { item in
         HStack {
           ForEach(game.cards) { card in
             CardView(card: card).onTapGesture {
@@ -26,7 +25,6 @@ struct ContentView: View {
         .padding()
         .foregroundColor(Color.orange)
         .font(game.cards.count > 4 ? Font.title : Font.largeTitle)
-//      }
     }
   }
 }

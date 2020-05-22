@@ -9,6 +9,7 @@
 import SwiftUI
 
 class EmojiMemoryGame {
+  
   // model
   private var game: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
 
@@ -21,7 +22,7 @@ class EmojiMemoryGame {
   // MARK: - Access to the Model
   
   var cards : Array<MemoryGame<String>.Card> {
-    return game.cards.shuffled()
+    return game.cards
   }
   
   // MARK: - Intent(s)

@@ -11,6 +11,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
   var cards: Array<Card>
   var score: Int = 0
   var theme: Theme
+  var chosenCardTimeStamp : Date?
   
   var indexOfTheOneAndOnlyFaceUpCard: Int? {
     get { cards.indices.filter { cards[$0].isFaceUp }.only }
@@ -29,8 +30,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         scoreSystem(chosenIndex: chosenIndex, potentialMatchIndex: potentialMatchIndex)
         self.cards[chosenIndex].isFaceUp = true
       } else {
+        chosenCardTimeStamp = Date()
         indexOfTheOneAndOnlyFaceUpCard = chosenIndex
     
+      }
+    }
+  }
+  
+  mutating func extraPoints() {
+    if let chosenCardTimeStamp = chosenCardTimeStamp {
+      let interval = abs(chosenCardTimeStamp.timeIntervalSince(Date()))
+      if interval < 5 {
+        score += 5
+        print("extrapoint")
       }
     }
   }
@@ -40,6 +52,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
       cards[chosenIndex].isMatched = true
       cards[potentialMatchIndex].isMatched = true
       score += 2
+      extraPoints()
     } else {
       if(cards[chosenIndex].seen || cards[potentialMatchIndex].seen) {
         self.score -= 1

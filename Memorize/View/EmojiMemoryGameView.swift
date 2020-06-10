@@ -21,25 +21,27 @@ struct EmojiMemoryGameView: View {
           }.padding()
         Grid(game.cards) {
           card in
-          CardView(card: card).onTapGesture {
+          CardView(card: card, mainColor: self.game.mainColor, secondColor: self.game.secondColor).onTapGesture {
             self.game.choose(card: card)
           }.padding(5)
         }
         .padding()
         Text("Score : \(game.score)").bold().font(.system(size: 30))
-      }.foregroundColor(game.color)
+      }.foregroundColor(game.mainColor)
       .navigationBarItems(
         trailing:Button(action: {self.game.newGame()}) {
           Text("New game")
         }
-      )
-    }.foregroundColor(game.color)
+      ).navigationBarTitle("", displayMode: .inline)
+    }.foregroundColor(game.mainColor)
   }
   
 }
 
 struct CardView: View {
   var card: MemoryGame<String>.Card
+  var mainColor: Color
+  var secondColor: Color?
   
   var body: some View {
     GeometryReader { geometry in
@@ -48,14 +50,16 @@ struct CardView: View {
   }
   
   func body(for size: CGSize) -> some View {
-    ZStack() {
+    let gradient = Gradient(colors: [mainColor, (secondColor != nil) ? secondColor! : mainColor])
+    
+    return ZStack() {
       if card.isFaceUp {
         RoundedRectangle(cornerRadius: self.cornerRadius).fill(Color.white)
         RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: edgeLineWidth)
         Text(card.content)
       } else {
         if !card.isMatched {
-          RoundedRectangle(cornerRadius: cornerRadius).fill()          
+          RoundedRectangle(cornerRadius: cornerRadius).fill( LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .bottom))
         }
       }
     }.font(Font.system(size: fontSize(for: size)) )

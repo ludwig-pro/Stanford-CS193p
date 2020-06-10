@@ -40,8 +40,12 @@ class EmojiMemoryGame: ObservableObject {
     return game.theme.name
   }
   
-  var color : Color {
+  var mainColor : Color {
     return game.theme.mainColor
+  }
+  
+  var secondColor : Color? {
+    return game.theme.secondColor
   }
   
   var score : Int {

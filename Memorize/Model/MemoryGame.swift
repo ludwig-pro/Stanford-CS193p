@@ -26,17 +26,26 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     print("card choosed : \(card)")
     if let chosenIndex = cards.firstIndex(matching: card), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched {
       if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
-        if cards[chosenIndex].content == cards[potentialMatchIndex].content {
-          cards[chosenIndex].isMatched = true
-          cards[potentialMatchIndex].isMatched = true
-          score += 2
-        } else {
-          score -= 1
-        }
+        scoreSystem(chosenIndex: chosenIndex, potentialMatchIndex: potentialMatchIndex)
         self.cards[chosenIndex].isFaceUp = true
       } else {
         indexOfTheOneAndOnlyFaceUpCard = chosenIndex
     
+      }
+    }
+  }
+  
+  mutating func scoreSystem(chosenIndex : Int, potentialMatchIndex: Int ) {
+    if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+      cards[chosenIndex].isMatched = true
+      cards[potentialMatchIndex].isMatched = true
+      score += 2
+    } else {
+      if(cards[chosenIndex].seen || cards[potentialMatchIndex].seen) {
+        self.score -= 1
+      } else {
+        cards[chosenIndex].seen = true
+        cards[potentialMatchIndex].seen = true
       }
     }
   }
@@ -58,6 +67,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     var isFaceUp: Bool = false
     var isMatched: Bool = false
     var content: CardContent
+    var seen: Bool = false
   }
   
 }

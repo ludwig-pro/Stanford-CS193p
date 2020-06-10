@@ -16,16 +16,45 @@ struct Theme {
   let emojis: [String]
   let numberOfPairsOfCards: Int
   let mainColor: Color
+  let secondColor: Color?
   
   init(name: String, emojis: [String], mainColor: Color) {
     self.name = name
     self.emojis = emojis.shuffled()
     self.numberOfPairsOfCards = Int.random(in: 2..<emojis.count)
     self.mainColor = mainColor
+    self.secondColor = nil
+
+  }
+  
+  init(name: String, emojis: [String], mainColor: Color, secondColor: Color) {
+    self.name = name
+    self.emojis = emojis.shuffled()
+    self.numberOfPairsOfCards = Int.random(in: 2..<emojis.count)
+    self.mainColor = mainColor
+    self.secondColor = secondColor
+  }
+  
+  init(name: String, emojis: [String], mainColor: Color, numberOfPairsOfCards: Int) {
+    self.name = name
+    self.emojis = emojis.shuffled()
+    self.mainColor = mainColor
+    
+    var secureNumberOfPair : Int {
+      if(numberOfPairsOfCards <= emojis.count) {
+        return numberOfPairsOfCards
+      } else {
+        return Int.random(in: 2..<emojis.count)
+      }
+    }
+    
+    self.numberOfPairsOfCards = secureNumberOfPair
+    self.secondColor = nil
+
   }
 }
 
-let halloween = Theme(name: "halloween", emojis: ["👻", "🎃", "🕷", "🧟‍♀️", "🧛🏾", "🧠", "🦇", "🐍", "💀", "🤡", "⛈", "🧛🏻‍♂️" ], mainColor: .orange)
+let halloween = Theme(name: "halloween", emojis: ["👻", "🎃", "🕷", "🧟‍♀️", "🧛🏾", "🧠", "🦇", "🐍", "💀", "🤡", "⛈", "🧛🏻‍♂️" ], mainColor: .orange, secondColor: .black)
 
 let food = Theme(name: "foodies", emojis: ["🥨", "🍗", "🍕", "🍟", "🥗", "🌯", "🍉", "🍣 ", "🍦"], mainColor: .red)
 

@@ -44,43 +44,30 @@ struct CardView: View {
   var secondColor: Color?
   
   var body: some View {
-    GeometryReader { geometry in
-      self.body(for: geometry.size)
+    let gradient = Gradient(colors: [mainColor, (secondColor != nil) ? secondColor! : mainColor])
+    return GeometryReader { geometry in
+      self.body(for: geometry.size, gradient: gradient)
     }
   }
   
-  func body(for size: CGSize) -> some View {
-    let gradient = Gradient(colors: [mainColor, (secondColor != nil) ? secondColor! : mainColor])
-    
-    return ZStack() {
-      if card.isFaceUp {
-        RoundedRectangle(cornerRadius: self.cornerRadius).fill(Color.white)
-        RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: edgeLineWidth)
+  @ViewBuilder
+  private func body(for size: CGSize, gradient: Gradient) -> some View {
+    if card.isFaceUp || !card.isMatched {
+      ZStack() {
+        Pie(startAngle: Angle.degrees(0 - 90), endAngle: Angle.degrees(110 - 90), clockwise: true).padding(4).opacity(0.4)
         Text(card.content)
-      } else {
-        if !card.isMatched {
-          RoundedRectangle(cornerRadius: cornerRadius).fill( LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .bottom))
-        }
-      }
-    }.font(Font.system(size: fontSize(for: size)) )
-      
-  }
+        
+      }.modifier(Cardify(isFaceUp: card.isFaceUp, gradient: gradient)).font(Font.system(size: fontSize(for: size)) )
+    }
+    
+  } 
   
-  // MARK: - Drawing Constants
-  
-  let cornerRadius : CGFloat = 10
-  let edgeLineWidth: CGFloat = 3
-  let fontScaleFactor: CGFloat = 0.75
-  
-  func fontSize(for size: CGSize) -> CGFloat {
+  private func fontSize(for size: CGSize) -> CGFloat {
     min(size.width, size.height) * fontScaleFactor
   }
 }
 
-
-
-
-
+private let fontScaleFactor: CGFloat = 0.70
 
 
 
@@ -93,7 +80,9 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-      EmojiMemoryGameView(game: EmojiMemoryGame())
+      let game = EmojiMemoryGame()
+      game.choose(card: game.cards[0])
+      return EmojiMemoryGameView(game:game)
     }
 }
 

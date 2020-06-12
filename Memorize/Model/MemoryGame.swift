@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
-  var cards: Array<Card>
+  private(set) var cards: Array<Card>
   var score: Int = 0
   var theme: Theme
   var chosenCardTimeStamp : Date?
   
-  var indexOfTheOneAndOnlyFaceUpCard: Int? {
+  private var indexOfTheOneAndOnlyFaceUpCard: Int? {
     get { cards.indices.filter { cards[$0].isFaceUp }.only }
     set {
       for index in cards.indices {
@@ -42,7 +42,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
       let interval = abs(chosenCardTimeStamp.timeIntervalSince(Date()))
       if interval < 5 {
         score += 5
-        print("extrapoint")
       }
     }
   }

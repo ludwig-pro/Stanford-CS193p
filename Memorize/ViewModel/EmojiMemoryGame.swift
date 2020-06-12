@@ -13,7 +13,7 @@ class EmojiMemoryGame: ObservableObject {
   // model
   @Published private var game: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
 
-  static func createMemoryGame() -> MemoryGame<String> {
+  private static func createMemoryGame() -> MemoryGame<String> {
     let emojiTheme = theme.randomElement()!
     return MemoryGame<String>(theme : emojiTheme ) { pairIndex in emojiTheme.emojis[pairIndex] }
   }

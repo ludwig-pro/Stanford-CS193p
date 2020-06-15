@@ -13,6 +13,16 @@ struct Pie: Shape {
   var endAngle: Angle
   var clockwise = false
   
+  var animatableData: AnimatablePair<Double, Double> {
+    get {
+      AnimatablePair(startAngle.radians, endAngle.radians)
+    }
+    set {
+      startAngle = Angle.radians(newValue.first)
+      endAngle = Angle.radians(newValue.second)
+    }
+  }
+  
   func path(in rect: CGRect) -> Path {
     let center = CGPoint(x: rect.midX, y: rect.midY) // ok
     let radius = min(rect.width, rect.height) / 2 // rayon = moitié du diamètre et diamètre : 2pir
@@ -29,6 +39,6 @@ struct Pie: Shape {
 
 struct Pie_Previews: PreviewProvider {
   static var previews: some View {
-      Pie(startAngle: Angle.degrees(0 - 90), endAngle: Angle.degrees(110 - 90), clockwise: true).padding(4).opacity(0.4)
+    Pie(startAngle: Angle.degrees(0 - 90), endAngle: Angle.degrees(110 - 90), clockwise: true).padding(4).opacity(0.4)
   }
 }
